@@ -1,10 +1,11 @@
 #!/bin/sh
+set -e
+# This is intended to run on a CentOS 7 or 8 host
 
-# This is intended to run on a CentOS 8 host
+yum install epel-release -y
 
-dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+yum install rpm-build git make mock rpmdevtools createrepo podman rsync -y
 
-yum install rpm-build git make mock rpmdevtools podman -y
-
+cd $(dirname $0)
 git submodule init
 git submodule update
