@@ -9,3 +9,5 @@ yum install rpm-build git make mock rpmdevtools createrepo podman rsync -y
 cd $(dirname $0)
 git submodule init
 git submodule update
+
+make getsrc
