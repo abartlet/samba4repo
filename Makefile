@@ -44,17 +44,20 @@ SAMBAPKGS+=samba-4.12.x-srpm
 REPOS+=samba4repo/el/7
 REPOS+=samba4repo/el/8
 REPOS+=samba4repo/fedora/32
+REPOS+=samba4repo/amazonlinux/2
 
 REPODIRS := $(patsubst %,%/x86_64/repodata,$(REPOS)) $(patsubst %,%/SRPMS/repodata,$(REPOS))
 
 CFGS+=samba4repo-7-x86_64.cfg
 CFGS+=samba4repo-8-x86_64.cfg
 CFGS+=samba4repo-f32-x86_64.cfg
+CFGS+=samba4repo-amazonlinux-2-x86_64.cfg
 
 # Link from /etc/mock
 MOCKCFGS+=epel-7-x86_64.cfg
 MOCKCFGS+=epel-8-x86_64.cfg
 MOCKCFGS+=fedora-32-x86_64.cfg
+MOCKCFGS+=amazonlinux-2-x86_64.cfg
 
 all:: install
 
@@ -189,6 +192,25 @@ samba4repo-rawhide-x86_64.cfg: /etc/mock/fedora-rawhide-x86_64.cfg
 	@echo 'name=samba4repo' >> $@
 	@echo 'enabled=1' >> $@
 	@echo 'baseurl=$(REPOBASE)/samba4repo/fedora/rawhide/x86_64/' >> $@
+	@echo 'failovermethod=priority' >> $@
+	@echo 'skip_if_unavailable=False' >> $@
+	@echo 'metadata_expire=0' >> $@
+	@echo 'gpgcheck=0' >> $@
+	@echo '"""' >> $@
+
+samba4repo-amazonlinux-2-x86_64.cfg: /etc/mock/amazonlinux-2-x86_64.cfg
+	@echo Generating $@ from $?
+	@cat $? > $@
+	@sed -i 's/amazonlinux-2-x86_64/samba4repo-amazonlinux-2-x86_64/g' $@
+	@echo >> $@
+	@echo "Disabling 'best=' for $@"
+	@sed -i '/^best=/d' $@
+	@echo "best=0" >> $@
+	@echo "config_opts['yum.conf'] += \"\"\"" >> $@
+	@echo '[samba4repo]' >> $@
+	@echo 'name=samba4repo' >> $@
+	@echo 'enabled=1' >> $@
+	@echo 'baseurl=$(REPOBASE)/samba4repo/amazonlinux/2/x86_64/' >> $@
 	@echo 'failovermethod=priority' >> $@
 	@echo 'skip_if_unavailable=False' >> $@
 	@echo 'metadata_expire=0' >> $@
