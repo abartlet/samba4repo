@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # This command only builds CentOS 7, which avoids the problems
 # building Fedora 32 under docker
 
